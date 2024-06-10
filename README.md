@@ -272,7 +272,7 @@ services:
     volumes:
       - redis_data:/data
     networks:
-      - SuaRede ## ---> NOME DA REDE INTERNA <--- ##
+      - ecosystem_network
     deploy:
       placement:
         constraints:
@@ -284,9 +284,9 @@ volumes:
     name: redis_woofedcrm_data
 
 networks:
-  SuaRede: ## ---> NOME DA REDE INTERNA <--- ##
+  ecosystem_network
     external: true
-    name: SuaRede ## ---> NOME DA REDE INTERNA <--- ##
+    ecosystem_network
 ```
 
 ![image](https://github.com/cwmkt/woofedcrm/assets/91642837/dedb5386-bc42-465c-a39e-1ff2aa131f85)
@@ -300,11 +300,127 @@ e pronto, o redis esta instalado e funcionando na sua VPS
 
 Lembre de Alterar os dados 
 
-seuemail@seuemail.com.br<br>
-
-
 ```bash
-stack Chatwoot aqui
+version: "3.7"
+
+services:
+  chatwoot:
+    image: chatwoot/chatwoot:latest
+    command: bundle exec rails s -p 3000 -b 0.0.0.0
+    entrypoint: docker/entrypoints/rails.sh
+    volumes:
+      - chatwoot_assets:/app/public
+    networks:
+      - ecosystem_network
+    environment:
+      - INSTALLATION_NAME=chat
+      - NODE_ENV=production
+      - RAILS_ENV=production
+      - INSTALLATION_ENV=docker
+      - SECRET_KEY_BASE=a7094a88032d106067b60b72e5aed6af
+      - FRONTEND_URL=https://seudominio.com.br
+      - DEFAULT_LOCALE=pt_BR
+      - FORCE_SSL=true
+      - ENABLE_ACCOUNT_SIGNUP=false
+      - REDIS_URL=redis://redis:6379
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=Senha Postgres
+      - POSTGRES_DATABASE=chatwoot
+      - ACTIVE_STORAGE_SERVICE=local
+      - RAILS_LOG_TO_STDOUT=true
+      - USE_INBOX_AVATAR_FOR_BOT=true
+      - MAILER_SENDER_EMAIL=contato@seudominio.com.br <contato@seudominio.com.br>
+      - SMTP_DOMAIN=seudominio.com.br
+      - SMTP_ADDRESS=mail.seudominio.com.br
+      - SMTP_PORT=587
+      - SMTP_USERNAME=contato@seudominio.com.br
+      - SMTP_PASSWORD=Senha SMTP
+      - SMTP_AUTHENTICATION=login
+      - SMTP_ENABLE_STARTTLS_AUTO=true
+      - SMTP_OPENSSL_VERIFY_MODE=peer
+      - MAILER_INBOUND_EMAIL_DOMAIN=seudominio.com.br
+      - DISABLE_TELEMETRY=true
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1024M
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.chatwoot.rule=Host(`app.seudominio.com.br`)
+        - traefik.http.routers.chatwoot.entrypoints=websecure
+        - traefik.http.routers.chatwoot.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.chatwoot.priority=1
+        - traefik.http.routers.chatwoot.service=chatwoot
+        - traefik.http.services.chatwoot.loadbalancer.server.port=3000 
+        - traefik.http.services.chatwoot.loadbalancer.passhostheader=true 
+        - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
+        - traefik.http.routers.chatwoot.middlewares=sslheader@docker
+
+
+  chatwoot_sidekiq:
+    image: chatwoot/chatwoot:latest
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    volumes:
+      - chatwoot_assets:/app/public
+
+    networks:
+      - ecosystem_network
+    environment:
+      - INSTALLATION_NAME=chat
+      - NODE_ENV=production
+      - RAILS_ENV=production
+      - INSTALLATION_ENV=docker
+      - DISABLE_TELEMETRY=true
+      - SECRET_KEY_BASE=a7094a88032d106067b60b72e5aed6af
+      - FRONTEND_URL=https://seudominio.com.br
+      - DEFAULT_LOCALE=pt_BR
+      - FORCE_SSL=true
+      - ENABLE_ACCOUNT_SIGNUP=false
+      - REDIS_URL=redis://redis:6379
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=Senha Postgres
+      - POSTGRES_DATABASE=chatwoot
+      - ACTIVE_STORAGE_SERVICE=local
+      - STORAGE_FORCE_PATH_STYLE:true
+      - RAILS_LOG_TO_STDOUT=true
+      - USE_INBOX_AVATAR_FOR_BOT=true
+      - MAILER_SENDER_EMAIL=contato@seudominio.com.br <contato@seudominio.com.br>
+      - SMTP_DOMAIN=seudominio.com.br
+      - SMTP_ADDRESS=mail.seudominio.com.br
+      - SMTP_PORT=465
+      - SMTP_USERNAME=contato@seudominio.com.br
+      - SMTP_PASSWORD= Senha SMTP
+      - SMTP_AUTHENTICATION=login
+      - SMTP_ENABLE_STARTTLS_AUTO=true
+      - SMTP_OPENSSL_VERIFY_MODE=peer
+      - MAILER_INBOUND_EMAIL_DOMAIN=contato@seudominio.com.br
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1024M
+volumes:
+  chatwoot_assets:
+    external: true
+    name: chatwoot_assets
+
+networks:
+  ecosystem_network:
+    external: true
+    name: ecosystem_network
 ```
 
 Depois clique em DEPLOY
