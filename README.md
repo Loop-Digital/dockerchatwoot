@@ -116,7 +116,7 @@ version: "3.8"
 services:
 
   agent:
-    image: portainer/agent:latest
+    image: portainer/agent:2.19.4
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
@@ -128,7 +128,7 @@ services:
         constraints: [node.platform.os == linux]
 
   portainer:
-    image: portainer/portainer-ce:latest
+    image: portainer/portainer-ce:2.19.4
     command: -H tcp://tasks.agent:9001 --tlsskipverify
     volumes:
       - portainer_volume:/data
