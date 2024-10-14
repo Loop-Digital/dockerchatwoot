@@ -256,12 +256,12 @@ services:
   redis:
     image: redis:latest
     command: [
-        "redis-server",
-        "--appendonly",
-        "yes",
-        "--port",
-        "6379"
-      ]
+      "redis-server",
+      "--appendonly",
+      "yes",
+      "--port",
+      "6379"
+    ]
     volumes:
       - redis_data:/data
     networks:
@@ -277,9 +277,8 @@ volumes:
     name: redis_woofedcrm_data
 
 networks:
-  ecosystem_network
+  ecosystem_network:
     external: true
-    ecosystem_network
 ```
 
 ![image](https://github.com/cwmkt/woofedcrm/assets/91642837/dedb5386-bc42-465c-a39e-1ff2aa131f85)
