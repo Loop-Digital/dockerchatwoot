@@ -318,7 +318,7 @@ services:
       - DEFAULT_LOCALE=pt_BR
       - FORCE_SSL=true
       - ENABLE_ACCOUNT_SIGNUP=false
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://redis:6379/0
       - POSTGRES_HOST=postgresql
       - POSTGRES_USERNAME=postgres
       - POSTGRES_PASSWORD=r45796yv3bhub9w4f3ga3ikxmxos648r
@@ -379,7 +379,7 @@ services:
       - DEFAULT_LOCALE=pt_BR
       - FORCE_SSL=true
       - ENABLE_ACCOUNT_SIGNUP=false
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://redis:6379/0
       - POSTGRES_HOST=postgresql
       - POSTGRES_USERNAME=postgres
       - POSTGRES_PASSWORD=r45796yv3bhub9w4f3ga3ikxmxos648r
