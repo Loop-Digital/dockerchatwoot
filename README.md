@@ -235,6 +235,10 @@ psql -U postgres
 ```
 
 ```bash
+r45796yv3bhub9w4f3ga3ikxmxos648r
+```
+
+```bash
 create database chatwoot;
 ```
 
@@ -315,9 +319,9 @@ services:
       - FORCE_SSL=true
       - ENABLE_ACCOUNT_SIGNUP=false
       - REDIS_URL=redis://redis:6379
-      - POSTGRES_HOST=postgres
+      - POSTGRES_HOST=postgresql
       - POSTGRES_USERNAME=postgres
-      - POSTGRES_PASSWORD=Senha Postgres
+      - POSTGRES_PASSWORD=r45796yv3bhub9w4f3ga3ikxmxos648r
       - POSTGRES_DATABASE=chatwoot
       - ACTIVE_STORAGE_SERVICE=local
       - RAILS_LOG_TO_STDOUT=true
@@ -376,9 +380,9 @@ services:
       - FORCE_SSL=true
       - ENABLE_ACCOUNT_SIGNUP=false
       - REDIS_URL=redis://redis:6379
-      - POSTGRES_HOST=postgres
+      - POSTGRES_HOST=postgresql
       - POSTGRES_USERNAME=postgres
-      - POSTGRES_PASSWORD=Senha Postgres
+      - POSTGRES_PASSWORD=r45796yv3bhub9w4f3ga3ikxmxos648r
       - POSTGRES_DATABASE=chatwoot
       - ACTIVE_STORAGE_SERVICE=local
       - STORAGE_FORCE_PATH_STYLE:true
