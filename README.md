@@ -63,7 +63,7 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true"
       - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.letsencryptresolver.acme.email=contato@seudominio.com.br"
+      - "--certificatesresolvers.letsencryptresolver.acme.email=contato@seudominio.com.br" # coloque seu email e so isso no traefik
       - "--certificatesresolvers.letsencryptresolver.acme.storage=/etc/traefik/letsencrypt/acme.json"
       - "--log.level=DEBUG"
       - "--log.format=common"
@@ -142,7 +142,7 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=ecosystem_network"
-        - "traefik.http.routers.portainer.rule=Host(`painel.seudominio.com.br`)"
+        - "traefik.http.routers.portainer.rule=Host(`painel.seudominio.com.br`)" #coloque seu dominio 
         - "traefik.http.routers.portainer.entrypoints=websecure"
         - "traefik.http.routers.portainer.priority=1"
         - "traefik.http.routers.portainer.tls.certresolver=letsencryptresolver"
@@ -311,24 +311,24 @@ x-base: &base
     POSTGRES_PASSWORD: r45796yv3bhub9w4f3ga3ikxmxos648r
     POSTGRES_DATABASE: chatwoot
     SECRET_KEY_BASE: a7094a88032d106067b60b72e5aed6af
-    FRONTEND_URL: https://sudominio.com.br
+    FRONTEND_URL: https://chatapp.loopdigital.site
     DEFAULT_LOCALE: 'pt_BR'
     INSTALLATION_ENV: docker
     NODE_ENV: production
     RAILS_ENV: production
     DISABLE_TELEMETRY: "true"
-    MAILER_SENDER_EMAIL: contato@seudominio.com.br
-    SMTP_DOMAIN: seudominio.com.br
-    SMTP_ADDRESS: mail.seudominio.com.br
+    MAILER_SENDER_EMAIL: clairtonlm@gmail.com
+    SMTP_DOMAIN: smtp.gmail.com
+    SMTP_ADDRESS: clairtonlm@gmail.com
     SMTP_PORT: 587
-    SMTP_USERNAME: contato@seudominio.com.br
-    SMTP_PASSWORD: Senha SMTP
+    SMTP_USERNAME: clairtonlm@gmail.com
+    SMTP_PASSWORD: jtnh kwrv sirx sdgw
     SMTP_AUTHENTICATION: login
     SMTP_ENABLE_STARTTLS_AUTO: "true"
     SMTP_OPENSSL_VERIFY_MODE: peer
-    MAILER_INBOUND_EMAIL_DOMAIN: seudominio.com.br
+    MAILER_INBOUND_EMAIL_DOMAIN: loopdigital.site
   networks:
-    - ecosystem_network
+    - loop-net
 
 services:
 
@@ -346,13 +346,13 @@ services:
     command: ['bundle', 'exec', 'rails', 's', '-p', '3000', '-b', '0.0.0.0']
     restart: always
     networks:
-      - ecosystem_network
+      - loop-net
     volumes:
       - chatwoot_assets:/app/public
     deploy:
       labels:
         - traefik.enable=true
-        - traefik.http.routers.chatwoot.rule=Host(`sudominio.com.br`)
+        - traefik.http.routers.chatwoot.rule=Host(`https://chatapp.loopdigital.site`)
         - traefik.http.routers.chatwoot.entrypoints=websecure
         - traefik.http.routers.chatwoot.tls.certresolver=letsencryptresolver
         - traefik.http.services.chatwoot.loadbalancer.server.port=3000
@@ -363,7 +363,7 @@ services:
     command: ['bundle', 'exec', 'sidekiq', '-C', 'config/sidekiq.yml']
     restart: always
     networks:
-      - ecosystem_network
+      -loop-net
     volumes:
       - chatwoot_assets:/app/public
 
@@ -373,9 +373,9 @@ volumes:
     name: chatwoot_assets
 
 networks:
-  ecosystem_network:
+  loop-net:
     external: true
-    name: ecosystem_network
+    name: loop-net
 ```
 
 Depois clique em DEPLOY
